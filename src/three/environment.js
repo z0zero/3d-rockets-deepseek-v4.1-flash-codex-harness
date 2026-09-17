@@ -340,7 +340,13 @@ export function createEnvironment(scene) {
   sunGlow.position.set(-4200, 180, -6200)
   sunGlow.renderOrder = -7
 
-  group.add(sky, stars, ocean, terrain, scrub, mountains, sunGlow)
+  // The dome, star field, and sun glow form one backdrop rig that is recentred
+  // on the camera every frame. Without it the camera climbs out through the
+  // 9000-unit dome during ascent and the sky silently disappears.
+  const backdrop = new THREE.Group()
+  backdrop.add(sky, stars, sunGlow)
+
+  group.add(backdrop, ocean, terrain, scrub, mountains)
   cloudDecks.forEach((deck) => group.add(deck))
   scene.add(group)
 
@@ -389,8 +395,9 @@ export function createEnvironment(scene) {
       hemisphere.intensity = THREE.MathUtils.lerp(0.75, 0.34, eased)
       keyLight.intensity = THREE.MathUtils.lerp(1.35, 0.5, eased)
     },
-    update(dt, elapsed) {
+    update(dt, elapsed, camera) {
       ocean.material.uniforms.uTime.value = elapsed
+      if (camera) backdrop.position.copy(camera.position)
       if (scene.fog) {
         ocean.material.uniforms.uFogColor.value.copy(scene.fog.color)
         ocean.material.uniforms.uFogDensity.value = scene.fog.density

@@ -332,11 +332,13 @@ export class LaunchScene {
       rocketY: ROCKET_BASE_Y + state.altitude,
     })
 
-    this.environment.update(dt, elapsed)
     this.environment.setAltitude(state.altitude)
     this.scene.fog.density = FOG_BASE_DENSITY * (1 - 0.88 * clamp01(state.altitude / 32000))
 
     this.updateCamera(dt, elapsed)
+    // Runs after the camera so the backdrop rig recentres on the final
+    // (post-shake) camera position before this frame is drawn.
+    this.environment.update(dt, elapsed, this.camera)
     this.renderer.render(this.scene, this.camera)
 
     this.telemetryAccumulator += rawDt
