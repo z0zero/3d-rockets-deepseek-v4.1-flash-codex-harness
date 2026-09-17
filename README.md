@@ -2,7 +2,17 @@
 
 A stylized, fully procedural 3D rocket launch experience built with React, Vite, and Three.js. No external 3D models, textures, or media are loaded at runtime: the rocket, launch tower, terrain, ocean, sky, flame, and smoke are all generated in code, so the whole launch site runs from a single `npm install`.
 
-![Rocket lifting off from the pad, engines at full throttle](docs/liftoff.png)
+## Screenshots
+
+| Pre-launch | Ignition |
+| --- | --- |
+| ![Pre-launch](docs/screenshots/01-launch-pad.jpg) | ![Ignition](docs/screenshots/02-ignition.jpg) |
+
+| Liftoff | Ascent |
+| --- | --- |
+| ![Liftoff](docs/screenshots/03-liftoff.jpg) | ![Ascent](docs/screenshots/04-ascent.jpg) |
+
+![High ascent](docs/screenshots/05-high-ascent.jpg)
 
 ## The launch sequence
 
@@ -37,9 +47,9 @@ Open the printed URL (Vite defaults to `http://localhost:5173/`). `npm run build
 - `src/three/rocket.js`: procedural rocket, launch tower, and pad infrastructure.
 - `src/three/environment.js`: terrain, ocean, sky, lighting, and fog.
 - `src/three/effects.js`: engine flame, expanding smoke and exhaust, and the ignition shockwave.
-- `src/three/textures.js`: canvas-generated textures, so the repo carries no image assets.
+- `src/three/textures.js`: canvas-generated textures, so the scene needs no image files.
 - `src/components/LaunchHud.jsx`: T-/T+ mission clock and telemetry readout.
 
-Inspired by a reference launch video supplied in the workspace during development; the repo itself contains no video or binary art assets.
+Inspired by a reference launch video supplied in the workspace during development. The repo ships no video, and the only committed images are the screenshots above.
 
 > Built with `DeepSeek-V4.1-Flash` using Codex Harness.
