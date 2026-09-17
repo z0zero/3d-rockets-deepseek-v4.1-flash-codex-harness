@@ -313,6 +313,7 @@ export class LaunchScene {
   }
 
   tick() {
+    if (!this.running) return
     this.frameId = requestAnimationFrame(this.tick)
     const rawDt = Math.min(this.clock.getDelta(), 0.05)
     const elapsed = this.clock.elapsedTime
@@ -347,6 +348,7 @@ export class LaunchScene {
 
   dispose() {
     this.running = false
+    this.telemetryHandler = () => {}
     cancelAnimationFrame(this.frameId)
     window.removeEventListener('resize', this.handleResize)
     if (typeof window !== 'undefined' && window.__launch && window.__launch.getState) {

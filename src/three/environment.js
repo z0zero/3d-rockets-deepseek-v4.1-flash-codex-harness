@@ -44,7 +44,10 @@ const OCEAN_FRAGMENT = `
   uniform vec3 uDeep;
   uniform vec3 uShallow;
   uniform vec3 uGlint;
+  uniform vec3 uFogColor;
+  uniform float uFogDensity;
   varying vec2 vUv;
+  varying float vFogDepth;
   void main() {
     vec2 point = vUv * 2.0 - 1.0;
     float distanceFromCenter = clamp(length(point), 0.0, 1.0);
@@ -53,6 +56,8 @@ const OCEAN_FRAGMENT = `
     float glint = smoothstep(0.72, 1.0, swell * 0.65 + ripple * 0.35);
     vec3 color = mix(uDeep, uShallow, smoothstep(0.15, 0.95, distanceFromCenter));
     color += uGlint * glint * 0.16;
+    float fogFactor = 1.0 - exp(-uFogDensity * uFogDensity * vFogDepth * vFogDepth);
+    color = mix(color, uFogColor, clamp(fogFactor, 0.0, 1.0));
     gl_FragColor = vec4(color, 1.0);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
@@ -151,16 +156,21 @@ function createOcean() {
       uDeep: { value: new THREE.Color('#081426') },
       uShallow: { value: new THREE.Color('#173352') },
       uGlint: { value: new THREE.Color('#ffb87a') },
+      uFogColor: { value: new THREE.Color('#16233a') },
+      uFogDensity: { value: 0.00042 },
     },
     vertexShader: `
       varying vec2 vUv;
+      varying float vFogDepth;
       void main() {
         vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+        vFogDepth = -viewPosition.z;
+        gl_Position = projectionMatrix * viewPosition;
       }
     `,
     fragmentShader: OCEAN_FRAGMENT,
-    fog: true,
+    fog: false,
   })
   const mesh = new THREE.Mesh(geometry, material)
   mesh.rotation.x = -Math.PI / 2
@@ -381,6 +391,10 @@ export function createEnvironment(scene) {
     },
     update(dt, elapsed) {
       ocean.material.uniforms.uTime.value = elapsed
+      if (scene.fog) {
+        ocean.material.uniforms.uFogColor.value.copy(scene.fog.color)
+        ocean.material.uniforms.uFogDensity.value = scene.fog.density
+      }
       for (let i = 0; i < cloudDecks.length; i += 1) {
         cloudDecks[i].rotation.z += dt * (0.004 + i * 0.0015)
       }
