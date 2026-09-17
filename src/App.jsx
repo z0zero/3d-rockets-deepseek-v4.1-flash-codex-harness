@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
 
+import { LaunchScene } from './three/LaunchScene.js'
+
 export default function App() {
   const sceneHost = useRef(null)
 
@@ -7,10 +9,11 @@ export default function App() {
     const host = sceneHost.current
     if (!host) return undefined
 
-    // The renderer attaches here in the next milestone; for now the shell
-    // simply owns and releases the canvas host element.
+    const launchScene = new LaunchScene(host)
+    launchScene.start()
+
     return () => {
-      host.replaceChildren()
+      launchScene.dispose()
     }
   }, [])
 
@@ -19,11 +22,9 @@ export default function App() {
       <div
         className="scene"
         ref={sceneHost}
-        role="img"
-        aria-label="Stylized rocket launch site rendered in 3D"
+        role="presentation"
       />
       <div className="vignette" aria-hidden="true" />
-      <p className="boot-message">Preparing launch site…</p>
     </div>
   )
 }
