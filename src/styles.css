@@ -1,0 +1,77 @@
+:root {
+  color-scheme: dark;
+  --hud-text: #eaf2ff;
+  --hud-dim: #9fb2cc;
+  --hud-accent: #7fd2ff;
+  --hud-warn: #ffb066;
+  --hud-panel: rgba(8, 13, 24, 0.55);
+  --hud-border: rgba(140, 180, 230, 0.28);
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #05070f;
+  color: var(--hud-text);
+  overflow: hidden;
+}
+
+.app {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  isolation: isolate;
+}
+
+.scene,
+.scene canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.scene canvas {
+  touch-action: none;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    rgba(0, 0, 0, 0) 45%,
+    rgba(0, 0, 0, 0.35) 82%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+.boot-message {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hud-dim);
+}
+
+@media (max-width: 720px) {
+  :root {
+    font-size: 15px;
+  }
+}

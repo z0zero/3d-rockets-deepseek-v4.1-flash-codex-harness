@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+qa-artifacts/
+.patch-tmp.txt
+
+# Reference footage is not part of the app bundle
+ssstwitter.com_*.mp4
